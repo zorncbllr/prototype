@@ -68,6 +68,11 @@ export function DataTable<T>({
       columnVisibility,
       rowSelection,
     },
+    initialState: {
+      pagination: {
+        pageSize: 15,
+      },
+    },
   });
 
   return (

@@ -27,7 +27,7 @@ export const columns: ColumnDef<Voter>[] = [
           onCheckedChange={(value) => {
             row.toggleSelected(!!value);
             console.log(!raw.isGiven);
-            mutate({ voterId: raw.voterId, value: !raw.isGiven });
+            mutate({ voterId: raw.voterId, value: !!value });
           }}
           aria-label="Select row"
         />

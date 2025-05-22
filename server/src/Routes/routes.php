@@ -9,6 +9,8 @@ $router->get("/voters", [VoterController::class, "getVoters"]);
 
 $router->post("/voters/import", [VoterController::class, "import"]);
 
+$router->post('/voters/export', [VoterController::class, 'export']);
+
 $router->patch("/voters/{voterId}", [VoterController::class, "changeStatus"]);
 
 $router->delete("/vouters", [VoterController::class, "clearVoters"]);

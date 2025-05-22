@@ -13,3 +13,8 @@ export interface ChangeStatusProps {
   voterId: string;
   value: boolean;
 }
+
+export interface ExportResponse {
+  message: string;
+  file: string;
+}

@@ -3,7 +3,11 @@
 namespace Src\Services;
 
 use PDOException;
-use PHPUnit\Util\PHP\JobRunnerRegistry;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Src\Core\Database;
 use Src\Models\Voter;
 use Src\Repositories\VoterRepository;
@@ -124,7 +128,73 @@ class VoterService
         }
     }
 
-    public function export() {}
+    public function export(): string
+    {
+        $voters = $this->voterRepository->getAllVoters();
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->setCellValue('A1', 'Voter ID');
+        $sheet->setCellValue('B1', 'Full Name');
+        $sheet->setCellValue('C1', 'Precinct');
+
+        $columns = ['A', 'B', 'C'];
+
+        foreach ($columns as $col) {
+            $sheet->getColumnDimension($col)->setWidth(50);
+            $sheet->getStyle("{$col}1")->getFont()->setSize(16)->setBold(true);
+            $sheet->getStyle("{$col}1")
+                ->getAlignment()
+                ->setHorizontal(Alignment::HORIZONTAL_CENTER)
+                ->setVertical(Alignment::VERTICAL_CENTER);
+        }
+
+        foreach ($voters as $index => $voter) {
+            $row = $index + 2;
+
+            $sheet->getRowDimension($row)->setRowHeight(25);
+
+            foreach ($columns as $col) {
+                $sheet->getColumnDimension($col)
+                    ->setWidth(50);
+                $sheet->getStyle("{$col}{$row}")
+                    ->getFont()
+                    ->setSize(12);
+                $sheet->getStyle("{$col}{$row}")
+                    ->getAlignment()
+                    ->setHorizontal(Alignment::HORIZONTAL_CENTER)
+                    ->setVertical(Alignment::VERTICAL_CENTER);
+            }
+
+            $sheet->setCellValue("A{$row}", $voter->voterId);
+            $sheet->setCellValue("B{$row}", $voter->name);
+            $sheet->setCellValue("C{$row}", $voter->precinct);
+
+            if ($voter->isGiven) {
+                $range = $sheet->getStyle("A{$row}:C{$row}");
+
+                $range->getFill()
+                    ->setFillType(Fill::FILL_SOLID)
+                    ->getStartColor()->setARGB("9E005DFF");
+            }
+        }
+
+        $writer = new Xlsx($spreadsheet);
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="voters.xlsx"');
+        header('Cache-Control: max-age=0');
+        header('Cache-Control: cache, must-revalidate');
+        header('Pragma: public');
+
+        ob_start();
+        $writer->save('php://output');
+        $excelOutput = ob_get_contents();
+        ob_end_clean();
+
+        return base64_encode($excelOutput);
+    }
 
     public function clearVoters()
     {

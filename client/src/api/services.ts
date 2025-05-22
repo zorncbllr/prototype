@@ -1,5 +1,10 @@
 import { axiosInstance } from "@/lib/api";
-import type { ChangeStatusProps, SuccessResponse, Voter } from "@/types/types";
+import type {
+  ChangeStatusProps,
+  ExportResponse,
+  SuccessResponse,
+  Voter,
+} from "@/types/types";
 
 export const getAllVoters = async (): Promise<Voter[]> => {
   return (await axiosInstance.get<Voter[]>("/voters")).data;
@@ -15,6 +20,10 @@ export const importPDF = async (
       },
     })
   ).data;
+};
+
+export const exportFile = async (): Promise<ExportResponse> => {
+  return (await axiosInstance.post<ExportResponse>("/voters/export")).data;
 };
 
 export const changeStatus = async (

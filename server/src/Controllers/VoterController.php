@@ -53,7 +53,16 @@ class VoterController
         return json(["message" => "Voter status has been updated"]);
     }
 
-    public function export() {}
+    public function export()
+    {
+        $file = $this->voterService->export();
+
+        status(200);
+        return json([
+            "message" => "File has been exported.",
+            "file" => $file
+        ]);
+    }
 
     public function clearVoters()
     {

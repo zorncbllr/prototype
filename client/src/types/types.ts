@@ -8,3 +8,8 @@ export interface Voter {
 export interface SuccessResponse {
   message: string;
 }
+
+export interface ChangeStatusProps {
+  voterId: string;
+  value: boolean;
+}

@@ -115,13 +115,11 @@ class VoterService
         }
     }
 
-    public function changeStatus(string $voterId)
+    public function changeStatus(string $voterId, bool $value)
     {
         try {
 
-            $voter = $this->voterRepository->getVoterById($voterId);
-
-            $this->voterRepository->changeStatus($voterId, !$voter->isGiven);
+            $this->voterRepository->changeStatus($voterId, $value);
         } catch (PDOException $e) {
         }
     }

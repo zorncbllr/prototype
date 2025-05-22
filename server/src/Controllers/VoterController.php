@@ -40,7 +40,8 @@ class VoterController
     public function changeStatus(Request $request)
     {
         $voterId = $request->params->voterId;
+        $value = $request->body->value;
 
-        $this->voterService->changeStatus($voterId);
+        $this->voterService->changeStatus($voterId, $value);
     }
 }

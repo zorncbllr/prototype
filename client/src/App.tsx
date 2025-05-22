@@ -4,6 +4,7 @@ import type { Voter } from "./types/types";
 import { useFetchVoters } from "./api/queries";
 import { Checkbox } from "./components/ui/checkbox";
 import ImportButton from "./components/import-button";
+import { useChangeStatus } from "./api/mutations";
 
 export const columns: ColumnDef<Voter>[] = [
   {
@@ -16,12 +17,17 @@ export const columns: ColumnDef<Voter>[] = [
       />
     ),
     cell: ({ row }) => {
-      const isGiven = row.original.isGiven;
+      const raw = row.original;
+      const { mutate } = useChangeStatus();
+      row.toggleSelected(raw.isGiven);
 
       return (
         <Checkbox
-          checked={row.getIsSelected() || isGiven}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => {
+            row.toggleSelected(!!value);
+            mutate({ voterId: raw.voterId, value: !raw.isGiven });
+          }}
           aria-label="Select row"
         />
       );

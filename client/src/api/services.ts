@@ -1,5 +1,5 @@
 import { axiosInstance } from "@/lib/api";
-import type { SuccessResponse, Voter } from "@/types/types";
+import type { ChangeStatusProps, SuccessResponse, Voter } from "@/types/types";
 
 export const getAllVoters = async (): Promise<Voter[]> => {
   return (await axiosInstance.get<Voter[]>("/voters")).data;
@@ -13,6 +13,16 @@ export const importPDF = async (
       headers: {
         "Content-Type": "multipart-formdata",
       },
+    })
+  ).data;
+};
+
+export const changeStatus = async (
+  data: ChangeStatusProps
+): Promise<SuccessResponse> => {
+  return (
+    await axiosInstance.patch<SuccessResponse>(`/voters/${data.voterId}`, {
+      value: data.value,
     })
   ).data;
 };

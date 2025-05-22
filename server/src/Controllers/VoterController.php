@@ -44,4 +44,14 @@ class VoterController
 
         $this->voterService->changeStatus($voterId, $value);
     }
+
+    public function export() {}
+
+    public function clearVoters()
+    {
+        $this->voterService->clearVoters();
+
+        status(204);
+        return json(["message" => "All data has been cleared."]);
+    }
 }

@@ -5,6 +5,9 @@ import { useFetchVoters } from "./api/queries";
 import { Checkbox } from "./components/ui/checkbox";
 import ImportButton from "./components/import-button";
 import { useChangeStatus } from "./api/mutations";
+import ExportButton from "./components/export-button";
+import ClearButton from "./components/clear-button";
+import DeleteModal from "./components/delete-modal";
 
 export const columns: ColumnDef<Voter>[] = [
   {
@@ -54,17 +57,19 @@ function App() {
   const { data: voters } = useFetchVoters();
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center pt-12">
       <div className="w-4/5">
         {voters && (
           <DataTable
             filter="name"
             data={voters}
             columns={columns}
-            actions={[<ImportButton />]}
+            actions={[<ExportButton />, <ImportButton />, <ClearButton />]}
           />
         )}
       </div>
+
+      <DeleteModal />
     </div>
   );
 }

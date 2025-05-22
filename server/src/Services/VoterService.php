@@ -123,4 +123,11 @@ class VoterService
         } catch (PDOException $e) {
         }
     }
+
+    public function export() {}
+
+    public function clearVoters()
+    {
+        $this->voterRepository->clearVoters();
+    }
 }

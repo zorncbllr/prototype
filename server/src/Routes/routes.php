@@ -11,6 +11,8 @@ $router->post("/voters/import", [VoterController::class, "import"]);
 
 $router->patch("/voters/{voterId}", [VoterController::class, "changeStatus"]);
 
+$router->delete("/vouters", [VoterController::class, "clearVoters"]);
+
 $router->_404(function () {
     status(404);
     return json(["message" => "Requested resource not found."]);

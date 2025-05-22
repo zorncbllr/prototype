@@ -67,4 +67,16 @@ class VoterRepository
 
         $stmt->execute(["voterId" => $voterId]);
     }
+
+    public function clearVoters()
+    {
+        $this->database->exec("DROP TABLE IF EXISTS voters");
+
+        $this->database->exec("CREATE TABLE voters (
+            voterId CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+            name VARCHAR(150) UNIQUE NOT NULL,
+            precinct VARCHAR(50) NOT NULL,
+            isGiven BOOLEAN DEFAULT false
+        )");
+    }
 }

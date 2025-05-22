@@ -26,3 +26,7 @@ export const changeStatus = async (
     })
   ).data;
 };
+
+export const clearVoters = async (): Promise<SuccessResponse> => {
+  return (await axiosInstance.delete<SuccessResponse>("/vouters")).data;
+};

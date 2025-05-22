@@ -16,6 +16,8 @@
             <div class="p-5 text-lg font-semibold text-left text-gray-900 bg-white flex justify-between w-full">
                 <span>Registered Voters</span>
 
+                <span class="text-sm font-normal text-gray-500">Total: <?= sizeof($voters) ?></span>
+
                 <div class="inline-flex rounded-md shadow-xs" role="group">
                     <form action="/import" method="post" class="relative" id="import-form" enctype="multipart/form-data">
                         <div class="relative">

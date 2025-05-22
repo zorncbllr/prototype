@@ -35,7 +35,10 @@ class VoterService
                 $precinctMap[$precinct] = $precinct;
             }
 
-            $precincts = array_keys($precinctMap);
+            $precincts = array_map(
+                fn($prec) => str_replace("Prec : ", "", $prec),
+                array_keys($precinctMap)
+            );
         }
 
         if (preg_match_all(
@@ -98,21 +101,16 @@ class VoterService
                     $index++;
                 }
 
-                $voters[] = ["name" => $name, "precinct" => $precincts[$index]];
+                $voter = new Voter();
+                $voter->name = $name;
+                $voter->precinct = $precincts[$index];
+
+                $voters[] = $voter;
             }
 
-            foreach ($voters as $voter) {
-                try {
-                    if ($voter['precinct'] == null) {
-                        return json($voter);
-                    }
-
-                    $this->voterRepository->createVoter(
-                        name: $voter['name'],
-                        precinct: $voter['precinct']
-                    );
-                } catch (PDOException $e) {
-                }
+            try {
+                $this->voterRepository->createVoter($voters);
+            } catch (PDOException $e) {
             }
         }
 

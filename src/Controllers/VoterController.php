@@ -26,7 +26,7 @@ class VoterController
     {
         $voters = $this->voterService->getAllVoters();
 
-        return view("Voters", ["voters" => $voters]);
+        return view("VotersView", ["voters" => $voters]);
     }
 
     public function import(Request $request)

@@ -25,16 +25,24 @@ class VoterRepository
         return $stmt->fetchAll(PDO::FETCH_CLASS, Voter::class);
     }
 
-    public function createVoter(string $name, string $precinct)
+    /** @param array<Voter> $imports  */
+    public function createVoter(array $imports)
     {
-        $stmt = $this->database->prepare(
-            "INSERT INTO voters (name, precinct)
-            VALUES (:name, :precinct)"
-        );
+        $query = "INSERT INTO voters (name, precinct) VALUES ";
 
-        $stmt->execute([
-            "name" => $name,
-            "precinct" => $precinct
-        ]);
+        $values = [];
+        $params = [];
+
+        foreach ($imports as $index => $voter) {
+            $values[] = "(:name_$index, :precinct_$index)";
+            $params["name_$index"] = $voter->name;
+            $params["precinct_$index"] = $voter->precinct;
+        }
+
+        $query .= implode(", ", $values);
+
+        $stmt = $this->database->prepare($query);
+
+        $stmt->execute([...$params]);
     }
 }

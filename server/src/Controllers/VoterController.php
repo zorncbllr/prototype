@@ -47,7 +47,7 @@ class VoterController
         $voterId = $request->params->voterId ?? null;
         $value = $request->body->value ?? null;
 
-        if (!$value) {
+        if ($value == null) {
             status(400);
             return json(["message" => "Value field is required."]);
         }

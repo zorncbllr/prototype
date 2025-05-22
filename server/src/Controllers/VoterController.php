@@ -29,7 +29,12 @@ class VoterController
 
     public function import(Request $request)
     {
-        $inputFile = $request->files->pdf;
+        $inputFile = $request->files->pdf ?? null;
+
+        if (!$inputFile) {
+            status(400);
+            return json(["message" => "PDF file is required."]);
+        }
 
         $this->voterService->import($inputFile);
 
@@ -39,10 +44,18 @@ class VoterController
 
     public function changeStatus(Request $request)
     {
-        $voterId = $request->params->voterId;
-        $value = $request->body->value;
+        $voterId = $request->params->voterId ?? null;
+        $value = $request->body->value ?? null;
+
+        if (!$value) {
+            status(400);
+            return json(["message" => "Value field is required."]);
+        }
 
         $this->voterService->changeStatus($voterId, $value);
+
+        status(200);
+        return json(["message" => "Voter status has been updated"]);
     }
 
     public function export() {}

@@ -33,6 +33,10 @@ const ImportButton = () => {
         formData.set("pdf", data.pdf![0]);
 
         importPDF(formData);
+
+        form.reset({
+          pdf: null,
+        });
       })}
     >
       <input

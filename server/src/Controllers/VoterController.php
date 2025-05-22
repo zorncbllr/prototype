@@ -44,13 +44,8 @@ class VoterController
 
     public function changeStatus(Request $request)
     {
-        $voterId = $request->params->voterId ?? null;
-        $value = $request->body->value ?? null;
-
-        if ($value == null) {
-            status(400);
-            return json(["message" => "Value field is required."]);
-        }
+        $voterId = $request->params->voterId;
+        $value = $request->body->value;
 
         $this->voterService->changeStatus($voterId, $value);
 

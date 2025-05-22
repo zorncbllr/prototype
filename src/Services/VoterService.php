@@ -2,6 +2,7 @@
 
 namespace Src\Services;
 
+use PDOException;
 use PHPUnit\Util\PHP\JobRunnerRegistry;
 use Src\Core\Database;
 use Src\Models\Voter;
@@ -27,28 +28,94 @@ class VoterService
 
         $matches = null;
 
+        if (preg_match_all("/Prec : \w+/", $text, $precincts)) {
+            $precinctMap = [];
+
+            foreach ($precincts[0] as $precinct) {
+                $precinctMap[$precinct] = $precinct;
+            }
+
+            $precincts = array_keys($precinctMap);
+        }
+
         if (preg_match_all(
             "/\n{1,2}(?:[*A-D]{1,3}\h+)?([\p{L}._-]+(?:\h+[\p{L}._-]+)*,\h*[\p{L}\h.'_-]+(?:,?\h*(?:[JS]R\.?|J\h*R\.?|II\.?|III\.?|IV\.?|VI{0,3}|IX|X|V)\h*)?[\p{L}\h.'_-]*)(?=\n\n)/u",
             $text,
             $matches
         )) {
 
-            $names = [];
+            $index = 0;
+            $precinctChanged = false;
+            $voters = [];
 
-            // return json(sizeof($matches[0]));
-
-            // return json($matches);
+            $legendCombinations = [
+                '*',
+                'A',
+                'B',
+                'C',
+                'D',
+                '*A',
+                '*B',
+                '*D',
+                'AB',
+                'AC',
+                'AD',
+                'BC',
+                'BD',
+                'CD',
+                '*AB',
+                '*AD',
+                '*BD',
+                'ABC',
+                'ABD',
+                'ACD',
+                'BCD',
+                'ABCD',
+                '*ABD'
+            ];
 
             foreach ($matches[0] as $match) {
-                if (preg_match("/\n{0,2}([^\n]*?,[^\n]+)/u", $match, $name)) {
-                    $names[] = $name[1];
+
+                if (!preg_match("/([^\n]*?,[^\n]+)/u", $match, $name)) {
+                    continue;
                 }
+
+                $name = $name[0];
+
+                $parts = explode(" ", $name);
+
+                if (in_array($parts[0], $legendCombinations)) {
+                    array_shift($parts);
+                    $name = implode(" ", $parts);
+                }
+
+                if ($name[0] != 'A') {
+                    $precinctChanged = true;
+                }
+
+                if ($name[0] == 'A' && $precinctChanged) {
+                    $precinctChanged = false;
+                    $index++;
+                }
+
+                $voters[] = ["name" => $name, "precinct" => $precincts[$index]];
             }
 
-            return json([
-                "length" => sizeof($names),
-                "voters" => $names
-            ]);
+            foreach ($voters as $voter) {
+                try {
+                    if ($voter['precinct'] == null) {
+                        return json($voter);
+                    }
+
+                    $this->voterRepository->createVoter(
+                        name: $voter['name'],
+                        precinct: $voter['precinct']
+                    );
+                } catch (PDOException $e) {
+                }
+            }
         }
+
+        return redirect("/");
     }
 }

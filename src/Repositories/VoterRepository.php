@@ -25,16 +25,15 @@ class VoterRepository
         return $stmt->fetchAll(PDO::FETCH_CLASS, Voter::class);
     }
 
-    public function createVoter(string $name, string $address, string $precinct)
+    public function createVoter(string $name, string $precinct)
     {
         $stmt = $this->database->prepare(
-            "INSERT INTO voters (name, address, precinct)
-            VALUES (:name, :address, :precinct)"
+            "INSERT INTO voters (name, precinct)
+            VALUES (:name, :precinct)"
         );
 
         $stmt->execute([
             "name" => $name,
-            "address" => $address,
             "precinct" => $precinct
         ]);
     }

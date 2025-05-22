@@ -50,9 +50,6 @@
                         Precinct
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Address
-                    </th>
-                    <th scope="col" class="px-6 py-3">
                         <span class="sr-only"></span>
                     </th>
                 </tr>
@@ -68,9 +65,6 @@
                         </td>
                         <td class="px-6 py-4">
                             <?= $voter->precinct ?>
-                        </td>
-                        <td class="px-6 py-4">
-                            <?= $voter->address ?>
                         </td>
                         <td class="px-6 py-4 text-right">
                             <a href="#" class="font-medium text-blue-600   hover:underline">Mark</a>

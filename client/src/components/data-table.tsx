@@ -36,7 +36,9 @@ export function DataTable<T>({
   data,
   columns,
   actions,
+  filter,
 }: {
+  filter: string;
   data: T[];
   columns: ColumnDef<T, any>[];
   actions: React.ReactNode[];
@@ -72,10 +74,10 @@ export function DataTable<T>({
     <div className="w-full">
       <div className="flex items-center py-4 justify-between">
         <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+          placeholder="Filter Names"
+          value={(table.getColumn(filter)?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
+            table.getColumn(filter)?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />

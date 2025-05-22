@@ -51,6 +51,7 @@ function App() {
       <div className="w-4/5">
         {voters && (
           <DataTable
+            filter="name"
             data={voters}
             columns={columns}
             actions={[<ImportButton />]}

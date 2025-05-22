@@ -28,7 +28,7 @@ class VoterService
         $matches = null;
 
         if (preg_match_all(
-            "/\\n{1,2}(?:[*A-D]{1,3}\\h+)?([\\p{L}_-]+(?:\\h+[\\p{L}_-]+)*,\\h*[\\p{L}\\h.'_-]+(?:,?\\h*(?:[JS]R\\.?|J\\h*R\\.?)\\h*)?[\\p{L}\\h.'_-]*)(?=\\n\\n)/u",
+            "/\\n{1,2}(?:[*A-D]{1,3}\\h+)?([\\p{L}_-]+(?:\\h+[\\p{L}_-]+)*,\\h*[\\p{L}\\h.'_-]+(?:,?\\h*(?:[JS]R\\.?|J\\h*R\\.?|II\\.?|III\\.?|IV\\.?|VI{0,3}|IX|X|V)\\h*)?[\\p{L}\\h.'_-]*)(?=\\n\\n)/u",
             $text,
             $matches
         )) {
@@ -40,7 +40,7 @@ class VoterService
             // return json($matches);
 
             foreach ($matches[0] as $match) {
-                if (preg_match("/\\n{1,2}([^\\n]{3,},\\s*[^\\n]+)/u", $match, $name)) {
+                if (preg_match("/\n{0,2}([^\n]*?,[^\n]+)/u", $match, $name)) {
                     $names[] = $name[1];
                 }
             }

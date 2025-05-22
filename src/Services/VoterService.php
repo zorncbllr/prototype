@@ -27,12 +27,6 @@ class VoterService
 
         $matches = null;
 
-        // if (preg_match_all(
-        //     "/\\n\\n(?:[*A-D]{1,3}\\h+)?([\\p{L}_-]{2,},\\h*[\\p{L}\\h.'_-]+(?:,?\\h*(?:[JS]R\\.?|J\\h*R\\.?)\\h*)?[\\p{L}\\h.'_-]*)(?=\\n\\n)/u",
-        //     $text,
-        //     $matches
-        // )) {
-
         if (preg_match_all(
             "/\\n{1,2}(?:[*A-D]{1,3}\\h+)?([\\p{L}_-]+(?:\\h+[\\p{L}_-]+)*,\\h*[\\p{L}\\h.'_-]+(?:,?\\h*(?:[JS]R\\.?|J\\h*R\\.?)\\h*)?[\\p{L}\\h.'_-]*)(?=\\n\\n)/u",
             $text,

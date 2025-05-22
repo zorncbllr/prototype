@@ -1,3 +1,5 @@
+USE ar
+
 INSERT INTO voters (name, precinct, address, isGiven) VALUES
 ('John Doe', 'Precinct 101', '123 Maple St, Springfield', false),
 ('Jane Smith', 'Precinct 102', '456 Oak Ave, Springfield', true),

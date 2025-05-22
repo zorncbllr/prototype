@@ -59,6 +59,8 @@ class VoterRepository
 
     public function changeStatus(string $voterId, bool $value)
     {
+        $value = $value ? 1 : 0;
+
         $stmt = $this->database->prepare(
             "UPDATE voters SET isGiven = $value WHERE voterId = :voterId"
         );

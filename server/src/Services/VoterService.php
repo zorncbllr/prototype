@@ -82,6 +82,53 @@ class VoterService
                 '*ABD'
             ];
 
+            $barangays = [
+                "AMBOLONG",
+                "AMOROY",
+                "AMOTAG",
+                "BAGAUMA",
+                "BALAWING",
+                "BALETE",
+                "BANGON",
+                "CABANGCALAN",
+                "CABAS-AN",
+                "CALANAY",
+                "CAPSAY",
+                "CONCEPCION",
+                "DAYHAGAN",
+                "DON PABLO DELA ROSA",
+                "GUMAHANG",
+                "JABOYOAN",
+                "LANANG",
+                "LUY-A",
+                "MACABUG",
+                "MALUBI",
+                "MANAGANAGA",
+                "MANAMOC",
+                "MARIPOSA",
+                "MATABA",
+                "MATALANGTALANG",
+                "MATONGOG",
+                "NABONGSORAN",
+                "PANGLE",
+                "PANIQUE",
+                "PINANAAN",
+                "POBLACION",
+                "PURO",
+                "SAN AGUSTIN",
+                "SAN ISIDRO",
+                "SAWANG",
+                "SYNDICATE",
+                "TALABAAN",
+                "TALIB",
+                "TIGBAO",
+                "TINAGO",
+                "TINIGBAN",
+                "AROROY",
+                "MASBATE"
+            ];
+
+
             foreach ($matches[0] as $match) {
                 $name = trim($match);
 
@@ -92,7 +139,15 @@ class VoterService
                     $name = implode(" ", $parts);
                 }
 
-                if (str_contains($name, 'AROROY') || str_contains($name, 'MASBATE')) {
+                $anAddress = false;
+                foreach ($barangays as $barangay) {
+                    if (str_contains($name, $barangay)) {
+                        $anAddress = true;
+                        break;
+                    }
+                }
+
+                if ($anAddress) {
                     continue;
                 }
 

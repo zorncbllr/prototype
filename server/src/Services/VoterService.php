@@ -94,7 +94,6 @@ class VoterService
                 "CABAS-AN",
                 "CALANAY",
                 "CAPSAY",
-                "CONCEPCION",
                 "DAYHAGAN",
                 "DON PABLO DELA ROSA",
                 "GUMAHANG",

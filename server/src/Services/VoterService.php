@@ -11,6 +11,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Src\Core\Database;
 use Src\Models\Voter;
 use Src\Repositories\VoterRepository;
+use TypeError;
 
 class VoterService
 {
@@ -46,7 +47,7 @@ class VoterService
         }
 
         if (preg_match_all(
-            "/\n{1,2}(?:[*A-D]{1,3}\h+)?([\p{L}._-]+(?:\h+[\p{L}._-]+)*,\h*[\p{L}\h.'_-]+(?:,?\h*(?:[JS]R\.?|J\h*R\.?|II\.?|III\.?|IV\.?|VI{0,3}|IX|X|V)\h*)?[\p{L}\h.'_-]*)(?=\n\n)/u",
+            "/\n{1,2}(?:[*A-D]{1,3}\h+)?([\p{L}._-]+(?:\h+[\p{L}._-]+)*,\h*[\p{L}\h.'_-]+(?:,?\h*(?:[JS]R\.?|J\h*R\.?|II\.?|III\.?|IV\.?|VI{0,3}|IX|X|V)\h*)?[\p{L}\h.'_-]*(?:\h*\"[\p{L}\s.'_-]*\")?)(?=\n\n)/u",
             $text,
             $matches
         )) {
@@ -82,12 +83,7 @@ class VoterService
             ];
 
             foreach ($matches[0] as $match) {
-
-                if (!preg_match("/([^\n]*?,[^\n]+)/u", $match, $name)) {
-                    continue;
-                }
-
-                $name = $name[0];
+                $name = trim($match);
 
                 $parts = explode(" ", $name);
 
@@ -96,25 +92,35 @@ class VoterService
                     $name = implode(" ", $parts);
                 }
 
+                if (str_contains($name, 'AROROY') || str_contains($name, 'MASBATE')) {
+                    continue;
+                }
+
                 if ($name[0] != 'A') {
                     $precinctChanged = true;
                 }
 
                 if ($name[0] == 'A' && $precinctChanged) {
                     $precinctChanged = false;
-                    $index++;
+
+                    if ($index < sizeof($precincts) - 1) {
+                        $index++;
+                    }
                 }
 
                 $voter = new Voter();
                 $voter->name = $name;
+
                 $voter->precinct = $precincts[$index];
 
                 $voters[] = $voter;
             }
 
+
             try {
                 $this->voterRepository->createVoter($voters);
             } catch (PDOException $e) {
+                return json($e->getMessage());
             }
         }
     }

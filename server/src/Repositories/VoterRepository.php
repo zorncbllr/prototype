@@ -3,6 +3,7 @@
 namespace Src\Repositories;
 
 use PDO;
+use PDOException;
 use Src\Core\Database;
 use Src\Models\Voter;
 
@@ -70,6 +71,11 @@ class VoterRepository
 
     public function clearVoters()
     {
+        try {
+            $this->database->exec("DROP INDEX name ON voters");
+        } catch (PDOException $e) {
+        }
+
         $this->database->exec("DROP TABLE IF EXISTS voters");
 
         $this->database->exec("CREATE TABLE voters (

@@ -47,7 +47,7 @@ class VoterService
         }
 
         if (preg_match_all(
-            "/\n{1,2}(?:[*A-D]{1,3}\h+)?([\\p{L}.?'`_-]+(?:\h+[\\p{L}.?'`_-]+)*(?:\h+[0-9]{1,4})?,\h*[\\p{L}\h.\"'?`._-]+(?:,?\h*(?:[JS]R\.?|J\h*R\.?|II\.?|III\.?|IV\.?|VI{0,3}|IX|X|V|[0-9]{1,4})\h*)?[\\p{L}\h.\"'?`._-]*(?:\h*\"[\\p{L}\s.'\"?_`-]*\")?)(?=\n\n)/u",
+            "/\n{1,2}(?:[*A-D]{1,3}\h+)?([\\p{L}.?'`_-]+(?:\h+[\\p{L}.?'`_-]+)*(?:,\h*(?:[JS]R\.?|J\h*R\.?|II\.?|III\.?|IV\.?|VI{0,3}|IX|X|V|[0-9]{1,4}))?,\h*[\\p{L}\h.\"'?`._-]+(?:,?\h*(?:[JS]R\.?|J\h*R\.?|II\.?|III\.?|IV\.?|VI{0,3}|IX|X|V|[0-9]{1,4})\h*)?[\\p{L}\h.\"'?`._-]*(?:\h*\"[\\p{L}\s.'\"?_`-]*\")?)(?=\n\n)/u",
             $text,
             $matches
         )) {
@@ -127,7 +127,6 @@ class VoterService
                 "MASBATE"
             ];
 
-
             foreach ($matches[0] as $match) {
                 $name = trim($match);
 
@@ -169,7 +168,6 @@ class VoterService
 
                 $voters[] = $voter;
             }
-
 
             try {
                 $this->voterRepository->createVoter($voters);

@@ -71,16 +71,11 @@ class VoterRepository
 
     public function clearVoters()
     {
-        try {
-            $this->database->exec("DROP INDEX name ON voters");
-        } catch (PDOException $e) {
-        }
-
         $this->database->exec("DROP TABLE IF EXISTS voters");
 
         $this->database->exec("CREATE TABLE voters (
             voterId CHAR(36) PRIMARY KEY DEFAULT (UUID()),
-            name VARCHAR(150) UNIQUE NOT NULL,
+            name VARCHAR(150) NOT NULL,
             precinct VARCHAR(50) NOT NULL,
             isGiven BOOLEAN DEFAULT false
         )");
